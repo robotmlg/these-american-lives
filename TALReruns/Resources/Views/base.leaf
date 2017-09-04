@@ -2,11 +2,21 @@
 <html>
 <head>
 	<title>#import("title")</title>
-	<link rel="stylesheet" href="/styles/app.css">
+	<link rel="stylesheet" href="/styles/bootstrap.min.css">
+    <link rel="stylesheet" href="/styles/styles.css">
 </head>
 <body>
-
-#import("content")
-
+<div class="container">
+    <div class="row">
+        <div class="col-9">
+            #import("content")
+        </div>
+        <div class="col-3">
+            <div class="my-sidebar">
+                Sidebar here!
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
