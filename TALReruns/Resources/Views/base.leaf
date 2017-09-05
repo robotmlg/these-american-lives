@@ -8,15 +8,28 @@
 <body>
 <div class="container">
     <div class="row">
-        <div class="col-9">
+        <main class="col-9">
             #import("content")
-        </div>
+        </main>
         <div class="col-3">
-            <div class="my-sidebar">
-                Sidebar here!
+            <div class="my-sidebar" align="right">
+                <h1>THESE</h1>
+                <h1>AMERICAN</h1>
+                <h1>LIVES</h1>
+                <hr/>
+                <h2>Calendar</h2>
+                <h2>Episodes</h2>
+                <h2>About</h2>
             </div>
         </div>
     </div>
+    <footer class="row">
+        <div class="col">
+            <hr/>
+            <p>Brought to you by <a href="https://www.mattgoldman.us">Matt Goldman</a>.</p>
+            <p>Not affiliated with This American Life, WBEZ, PRX, or Chicago Public Media.</p>
+        </div>
+    </footer>
 </div>
 </body>
 </html>

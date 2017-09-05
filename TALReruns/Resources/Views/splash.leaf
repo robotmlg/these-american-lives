@@ -1,10 +1,41 @@
 #extend("base")
 
-#export("title") { It works }
+#export("title") { These American Lives - This American Life Rerun Tracker }
 
 #export("content") {
-	<div class="welcome">
-		<img src="/images/it-works.png">
-	</div>
+<div class="row episode-card">
+    <div class="col-sm-4">
+		<img src="https://hw4.thisamericanlife.org/sites/default/files/imagecache/large_square/episodes/624-sm_0.jpg" width=100%>
+    </div>
+    <div class="col-sm-8">
+        <h1>THIS WEEK</h1>
+        <h2>624: Private Geography</h2>
+        <h4>September 1, 2017</h4>
+        <p>Everyone walks around on their own private map of the world. The places we’re from and how they made us, whether we like it or not.</p>
+    </div>
+</div>
+<div class="row episode-card">
+    <div class="col-sm-4">
+        <img src="https://hw2.thisamericanlife.org/sites/default/files/imagecache/large_square/episodes/625-sm.png" width=100%>
+            </div>
+    <div class="col-sm-8">
+        <h1>NEXT WEEK</h1>
+        <h2>625: Essay B</h2>
+        <h4>September 8, 2017</h4>
+        <p>If you’ve applied to college in the US, you might remember an essay question like Essay B. Ten years ago, on Texas college applications, Essay B asked applicants to imagine someone from a very different background, and to—in essay form—describe this imaginary person who would help you grow, if you were in school together. This week, stories from people who were considered just different enough to benefit some other person’s school experience, whether or not they wanted to.</p>
+    </div>
+</div>
+<div class="row episode-card">
+    <div class="col-sm-4">
+        <img src="https://hw3.thisamericanlife.org/sites/default/files/imagecache/large_square/episodes/Afrofuturism_TAL%20final%20cropped2%20200x200.jpg" width=100%>
+            </div>
+    <div class="col-sm-8">
+        <h1>LAST WEEK</h1>
+        <h2>623: We Are in the Future</h2>
+        <h4>August 25, 2017</h4>
+        <p>One of our producers, Neil Drumming, has recently become fascinated with Afrofuturism. It's more than sci-fi. It’s a way of looking at black culture that’s fantastic, creative, and oddly hopeful—which feels especially urgent during a time without a lot of optimism.
+        Featuring the new song "The Deep" by clppng. Original artwork by Paul Davey. Click to enlarge.</p>
+    </div>
+</div>
 }
 

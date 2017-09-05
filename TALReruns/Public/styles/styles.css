@@ -1,5 +1,19 @@
+body {
+    background-color: #f4ecd4;
+    margin-top: 15px;
+}
+
+.episode-card {
+    background-color: #FFFFFF;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
 
 
 .my-sidebar {
-    border-left: 1px solid #333333;
+    background-color: #FFFFFF;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-right: 15px;
 }
