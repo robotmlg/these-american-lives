@@ -8,10 +8,10 @@
 <body>
 <div class="container">
     <div class="row">
-        <main class="col-9">
+        <main class="col-lg-9">
             #import("content")
         </main>
-        <div class="col-3">
+        <div class="col-lg-3">
             <div class="my-sidebar" align="right">
                 <h1>THESE</h1>
                 <h1>AMERICAN</h1>
@@ -20,14 +20,16 @@
                 <h2>Calendar</h2>
                 <h2>Episodes</h2>
                 <h2>About</h2>
+                <hr/>
+                <p>Every website has a story, and this website's story is that it tracks when episodes of <i>This American Life</i> are re-aired.</p>
             </div>
         </div>
     </div>
     <footer class="row">
         <div class="col">
             <hr/>
-            <p>Brought to you by <a href="https://www.mattgoldman.us">Matt Goldman</a>.</p>
-            <p>Not affiliated with This American Life, WBEZ, PRX, or Chicago Public Media.</p>
+            <p>Brought to you by <a href="https://mattgoldman.us">Matt Goldman</a>.</p>
+            <p>Not affiliated with This American Life, WBEZ, NPR, PRX, or Chicago Public Media.</p>
         </div>
     </footer>
 </div>
