@@ -12,9 +12,9 @@ CREATE TABLE IF NOT EXISTS airings(
   , air_date DATE UNIQUE NOT NULL
 );  
 
-COPY episodes FROM '/Volumes/Mac Data/Code/TALReruns/episodes20170902.csv' WITH (FORMAT csv, HEADER TRUE);
+-- COPY episodes FROM '/Volumes/Mac Data/Code/TALReruns/episodes20170902.csv' WITH (FORMAT csv, HEADER TRUE);
 
-COPY airings (episode_id, air_date) FROM '/Volumes/Mac Data/Code/TALReruns/original_airdates.csv' WITH (FORMAT csv, HEADER TRUE);
+-- COPY airings (episode_id, air_date) FROM '/Volumes/Mac Data/Code/TALReruns/original_airdates.csv' WITH (FORMAT csv, HEADER TRUE);
 
 CREATE OR REPLACE VIEW original_airings AS
 	SELECT e.*, original_air_date FROM episodes e
@@ -25,5 +25,6 @@ CREATE OR REPLACE VIEW original_airings AS
 	) tbl ON e.episode_id = tbl.episode_id;
 	
 CREATE OR REPLACE VIEW all_airings AS
-	SELECT e.*, a.air_date FROM episodes e
-	INNER JOIN airings a ON e.episode_id = a.episode_id;
+	SELECT o.*, a.air_date FROM original_airings o
+	INNER JOIN airings a ON o.episode_id = a.episode_id;
+
