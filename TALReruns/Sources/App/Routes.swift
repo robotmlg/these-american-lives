@@ -7,19 +7,16 @@ final class Routes: RouteCollection {
     }
     
     func build(_ builder: RouteBuilder) throws {
+        
         /// GET /
-        builder.get { req in
-            return try self.view.make("splash")
-        }
+        builder.get("", handler: SplashController(view).getSplashData)
+
+        /// GET /calendar/...
+        builder.resource("calendar", CalendarController(view))
         
-        /// GET /hello/...
-        builder.resource("hello", HelloController(view))
+        /// GET /episodes/...
+        builder.resource("episodes", EpisodesController(view))
         
-        // response to requests to /info domain
-        // with a description of the request
-        builder.get("info") { req in
-            return req.description
-        }
-        
+        /// GET /about
     }
 }

@@ -17,9 +17,10 @@ import App
 /// .run() runs the Droplet's commands, 
 /// if no command is given, it will default to "serve"
 let config = try Config()
+
 try config.setup()
 
 let drop = try Droplet(config)
-try drop.setup()
 
+try drop.setup()
 try drop.run()

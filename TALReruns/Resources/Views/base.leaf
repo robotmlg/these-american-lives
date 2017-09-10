@@ -13,13 +13,13 @@
         </main>
         <div class="col-lg-3">
             <div class="my-sidebar" align="right">
-                <h1>THESE</h1>
-                <h1>AMERICAN</h1>
-                <h1>LIVES</h1>
+                <h1><a href="/">THESE<br/>
+                AMERICAN<br/>
+                LIVES</a></h1>
                 <hr/>
-                <h2>Calendar</h2>
-                <h2>Episodes</h2>
-                <h2>About</h2>
+                <h2><a href="calendar">Calendar</a></h2>
+                <h2><a href="episodes">Episodes</a></h2>
+                <h2><a href="about">About</a></h2>
                 <hr/>
                 <p>Every website has a story, and this website's story is that it tracks when episodes of <i>This American Life</i> are re-aired.</p>
             </div>

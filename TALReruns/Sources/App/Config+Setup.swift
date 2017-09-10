@@ -1,4 +1,5 @@
 import LeafProvider
+import PostgreSQLProvider
 
 extension Config {
     public func setup() throws {
@@ -7,10 +8,15 @@ extension Config {
         Node.fuzzy = [JSON.self, Node.self]
 
         try setupProviders()
+        
+        self.preparations.append(Episode.self)
+        self.preparations.append(Airing.self)
+
     }
     
     /// Configure providers
     private func setupProviders() throws {
         try addProvider(LeafProvider.Provider.self)
+        try addProvider(PostgreSQLProvider.Provider.self)
     }
 }

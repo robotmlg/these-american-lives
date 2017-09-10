@@ -1,0 +1,25 @@
+#extend("base")
+
+#export("title") { These American Lives - Calendar }
+
+#export("content") {
+<div class="row episode-card">
+<div class="col">
+<h1>Episode Calendar</h1>
+</div>
+</div>
+#loop(episodes, "episode") {
+<div class="row episode-card">
+    <div class="col-sm-2">
+        <img src="#(episode.imageUrl)" width=100%>
+    </div>
+    <div class="col-sm-10">
+        <h4><a href="/episodes/#(episode.episodeId)">#(episode.episodeId): #(episode.title)</a> - #equal(episode.airDate, episode.originalAirDate) { NEW EPISODE } ##else()    { RERUN }</h4>
+        <h5>#(episode.airDate) #equal(episode.airDate, episode.originalAirDate) {} ##else() { - Originally Aired #(episode.originalAirDate) }</h5>
+        <p>#truncate(episode.description)...</p>
+        <p align="right"><a href="#(episode.episodeUrl)">More on this episode from <i>This American Life</i> »</a><p>
+    </div>
+</div>
+}
+}
+

@@ -9,12 +9,12 @@ CREATE TABLE IF NOT EXISTS episodes(
 CREATE TABLE IF NOT EXISTS airings(
     airing_id SERIAL PRIMARY KEY
   , episode_id INTEGER NOT NULL REFERENCES episodes (episode_id)
-  , air_date DATE UNIQUE NOT NULL
+  , air_date TIMESTAMP UNIQUE NOT NULL
 );  
 
--- COPY episodes FROM '/Volumes/Mac Data/Code/TALReruns/episodes20170902.csv' WITH (FORMAT csv, HEADER TRUE);
+COPY episodes FROM '/Volumes/Mac Data/Code/TALReruns/episodes20170902.csv' WITH (FORMAT csv, HEADER TRUE);
 
--- COPY airings (episode_id, air_date) FROM '/Volumes/Mac Data/Code/TALReruns/original_airdates.csv' WITH (FORMAT csv, HEADER TRUE);
+COPY airings (episode_id, air_date) FROM '/Volumes/Mac Data/Code/TALReruns/original_airdates.csv' WITH (FORMAT csv, HEADER TRUE);
 
 CREATE OR REPLACE VIEW original_airings AS
 	SELECT e.*, original_air_date FROM episodes e
