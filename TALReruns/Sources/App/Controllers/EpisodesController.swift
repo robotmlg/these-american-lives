@@ -24,12 +24,20 @@ final class EpisodesController : ResourceRepresentable{
         
         return try view.make("episodes", [
             "episodes": latestEpisodes.makeJSON(),
-            ], for: req)
+        ], for: req)
+    }
+    
+    /// GET /episodes/:id
+    func show(_ req: Request, _ episode: Episode) throws -> ResponseRepresentable {
+        return try view.make("episode", [
+            "episode": episode.makeJSON()
+        ], for: req)
     }
     
     func makeResource() -> Resource<Episode> {
         return Resource(
-            index: index
+            index: index,
+            show: show
         )
     }
 }

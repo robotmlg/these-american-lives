@@ -1,0 +1,23 @@
+#extend("base")
+
+#export("title") { These American Lives - About }
+
+#export("content") {
+<div class="row view-card">
+<div class="col">
+    <h1>About</h1>
+</div>
+</div>
+<div class="row view-card">
+<div class="col">
+<h3>Why?</h3>
+<p>I enjoy a re-run <i>TAL</i> episode as much as the next guy, but I wanted to be able to figure out when each episode had most recently re-aired, and to track those re-runs.  <a href="https://www.thisamericanlife.org">ThisAmericanLife.org</a> only tells you the original air date of each episode.  So, here we are, crowdsourcing and web-scraping This American Life re-runs</p>
+<h3>What's this site built with?</h3>
+<p>Swift, <a href="https://vapor.codes">Vapor</a>, PostgreSQL, <a href="https://www.getbootstrap.com">Bootstrap</a>, and a spalsh of Python to gather the initial web-scrape data</p>
+<h3>What's your favorite <i>This American Life</i> episode?</h3>
+<p><a href="/episodes/513">513: 129 Cars</a></p>
+</div>
+</div>
+
+}
+

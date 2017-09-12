@@ -17,9 +17,9 @@
                 AMERICAN<br/>
                 LIVES</a></h1>
                 <hr/>
-                <h2><a href="calendar">Calendar</a></h2>
-                <h2><a href="episodes">Episodes</a></h2>
-                <h2><a href="about">About</a></h2>
+                <h2><a href="/calendar">Calendar</a></h2>
+                <h2><a href="/episodes">Episodes</a></h2>
+                <h2><a href="/about">About</a></h2>
                 <hr/>
                 <p>Every website has a story, and this website's story is that it tracks when episodes of <i>This American Life</i> are re-aired.</p>
             </div>
@@ -28,10 +28,9 @@
     <footer class="row">
         <div class="col">
             <hr/>
-            <p>Brought to you by <a href="https://mattgoldman.us">Matt Goldman</a>.</p>
+            <p>Brought to you by <a href="https://mattgoldman.us">Matt Goldman</a>.  Contribute on <a href="https://www.github.com/robotmlg">GitHub</a></p>
             <p>Not affiliated with This American Life, WBEZ, NPR, PRX, or Chicago Public Media.</p>
         </div>
     </footer>
 </div>
-</body>
 </html>

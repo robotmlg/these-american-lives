@@ -4,7 +4,7 @@
 
 #export("content") {
 #loop(episodes, "episode") {
-<div class="row episode-card">
+<div class="row view-card">
     <div class="col-sm-4">
         <img src="#(episode.imageUrl)" width=100%>
     </div>

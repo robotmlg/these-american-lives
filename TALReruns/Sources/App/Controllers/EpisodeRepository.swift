@@ -18,4 +18,9 @@ final class EpisodeRepository {
     func getLatestEpisodes(_ count: Int, offset: Int = 0) throws -> [Episode] {
         return try Episode.makeQuery().sort("episode_id", .descending).limit(count, offset: offset).all()
     }
+    
+    func getEpisode(_ id: Int) throws -> Episode {
+        guard let episode = try Episode.find(id) else { throw Abort.notFound }
+        return episode
+    }
 }

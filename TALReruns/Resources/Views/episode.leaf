@@ -1,0 +1,30 @@
+#extend("base")
+
+#export("title") { These American Lives - Episode #(episode.episodeId): #(episode.title) }
+
+#export("content") {
+<div class="row view-card">
+    <div class="col">
+        <h1><a href="/episodes/#(episode.episodeId)">Episode #(episode.episodeId): #(episode.title)</a></h1>
+    </div>
+</div>
+<div class="row view-card">
+    <div class="col-sm-5">
+        <img src="#(episode.imageUrl)" width=100%>
+    </div>
+    <div class="col-sm-7">
+        <h5>#(episode.originalAirDate)</h5>
+        <p>#(episode.description)</p>
+        <p align="right"><a href="#(episode.episodeUrl)">More on this episode from <i>This American Life</i> »</a></p>
+    </div>
+</div>
+<div class="row view-card">
+    <div class="col-sm-6">
+        <p><a href="">Previous Episode</a></p>
+    </div>
+    <div class="col-sm-6">
+        <p align="right"><a href="">Next Episode »</a></p>
+    </div>
+</div>
+}
+

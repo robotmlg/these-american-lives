@@ -9,7 +9,9 @@ final class Routes: RouteCollection {
     func build(_ builder: RouteBuilder) throws {
         
         /// GET /
-        builder.get("", handler: SplashController(view).getSplashData)
+        builder.get { request in
+            return try SplashController(self.view).getSplashData(request)
+        }
 
         /// GET /calendar/...
         builder.resource("calendar", CalendarController(view))
@@ -18,5 +20,8 @@ final class Routes: RouteCollection {
         builder.resource("episodes", EpisodesController(view))
         
         /// GET /about
+        builder.get("about") { request in
+            return try self.view.make("about")
+        }
     }
 }

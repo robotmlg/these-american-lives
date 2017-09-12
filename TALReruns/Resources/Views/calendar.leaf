@@ -3,13 +3,13 @@
 #export("title") { These American Lives - Calendar }
 
 #export("content") {
-<div class="row episode-card">
+<div class="row view-card">
 <div class="col">
 <h1>Episode Calendar</h1>
 </div>
 </div>
 #loop(episodes, "episode") {
-<div class="row episode-card">
+<div class="row view-card">
     <div class="col-sm-2">
         <img src="#(episode.imageUrl)" width=100%>
     </div>
