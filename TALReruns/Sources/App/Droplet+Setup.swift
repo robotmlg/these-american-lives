@@ -9,6 +9,8 @@ extension Droplet {
         
         if let leaf = self.view as? LeafRenderer {
             leaf.stem.register(Truncate())
+            leaf.stem.register(Inc())
+            leaf.stem.register(Dec())
         }
     }
 }
