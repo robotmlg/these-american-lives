@@ -20,7 +20,9 @@ final class CalendarController : ResourceRepresentable{
     
     /// GET /calendar
     func index(_ req: Request) throws -> ResponseRepresentable {
-        let latestAirings = try episodeRepository.getLatestAirings(25)
+        let count = req.query?["count"]?.int ?? 25
+        let offset = req.query?["offset"]?.int ?? 0
+        let latestAirings = try episodeRepository.getLatestAirings(count, offset: offset)
         
         return try view.make("calendar", [
             "episodes": latestAirings.makeJSON(),

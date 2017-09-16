@@ -29,8 +29,13 @@ final class EpisodesController : ResourceRepresentable{
     
     /// GET /episodes/:id
     func show(_ req: Request, _ episode: Episode) throws -> ResponseRepresentable {
+        
+        let e = try episode.makeJSON()
+        
         return try view.make("episode", [
-            "episode": episode.makeJSON()
+            "episode": e,
+            "next": episode.episodeId + 1,
+            "previous": episode.episodeId - 1,
         ], for: req)
     }
     

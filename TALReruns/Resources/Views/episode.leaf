@@ -20,10 +20,10 @@
 </div>
 <div class="row view-card">
     <div class="col-sm-6">
-        <p><a href="/episodes/#dec(episode.episodeId)">« Previous Episode</a></p>
+        #if(previous) { <p><a href="/episodes/#(previous)">« Previous Episode</a></p> }
     </div>
     <div class="col-sm-6">
-        <p align="right"><a href="/episodes/#inc(episode.episodeId)">Next Episode »</a></p>
+        <p align="right"><a href="/episodes/#(next)">Next Episode »</a></p>
     </div>
 </div>
 }

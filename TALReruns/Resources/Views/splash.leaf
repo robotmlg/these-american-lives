@@ -17,5 +17,10 @@
     </div>
 </div>
 }
+<div class="row view-card">
+    <div class="col">
+        <p align="right"><a href="/calendar">More Recent Episodes »</a></p>
+    </div>
+</div>
 }
 
