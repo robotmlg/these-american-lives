@@ -15,7 +15,7 @@ public final class EpisodeFetcher {
     public func fetch(_ htmlString: String) throws {
         if let html = HTML(html: htmlString, encoding: .utf8) {
             for node in html.xpath("//div[contains(@class, 'slider')]") {
-                print(node.toHTML)
+                print(node.toHTML!)
             }
         }
     }

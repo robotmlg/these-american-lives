@@ -13,9 +13,9 @@ final class EpisodesController : ResourceRepresentable{
     let view: ViewRenderer
     let episodeRepository: EpisodeRepository
     
-    init(_ view: ViewRenderer) {
+    init(_ view: ViewRenderer, repo: EpisodeRepository) {
         self.view = view
-        episodeRepository = EpisodeRepository()
+        episodeRepository = repo
     }
     
     /// GET /episodes
