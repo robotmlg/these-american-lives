@@ -8,6 +8,14 @@
 <h1>Episode Calendar</h1>
 </div>
 </div>
+<div class="row view-card">
+    <div class="col-sm-6">
+        #equal(previousStart, previousEnd) {} ##else() { <p><a href="/calendar/?start=#(previousStart)&end=#(previousEnd)">« Previous Episodes</a></p> }
+    </div>
+    <div class="col-sm-6">
+        #equal(nextStart, nextEnd) {} ##else() { <p align="right"><a href="/calendar/?start=#(nextStart)&end=#(nextEnd)">Next Episodes »</a></p> }
+    </div>
+</div>
 #loop(episodes, "episode") {
 <div class="row view-card">
     <div class="col-sm-2">
@@ -21,5 +29,13 @@
     </div>
 </div>
 }
+<div class="row view-card">
+    <div class="col-sm-6">
+        #equal(previousStart, previousEnd) {} ##else() { <p><a href="/calendar/?start=#(previousStart)&end=#(previousEnd)">« Previous Episodes</a></p> }
+    </div>
+    <div class="col-sm-6">
+        #equal(nextStart, nextEnd) {} ##else() { <p align="right"><a href="/calendar/?start=#(nextStart)&end=#(nextEnd)">Next Episodes »</a></p> }
+    </div>
+</div>
 }
 

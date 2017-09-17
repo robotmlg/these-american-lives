@@ -25,7 +25,11 @@ final class Episode: Model, Preparation, JSONConvertible, ResponseRepresentable 
     // view-only fields
     var tag: String
     
-    static let formatter = DateFormatter()
+    static let formatter: DateFormatter = {
+        let df = DateFormatter()
+        df.dateStyle = .long
+        return df
+    }()
     
     init(row: Row) throws {
         episodeId = try row.get("episode_id")
@@ -52,8 +56,6 @@ final class Episode: Model, Preparation, JSONConvertible, ResponseRepresentable 
     }
     
     func makeJSON() throws -> JSON {
-        Episode.formatter.dateStyle = .long
-        
         var json = JSON()
         
         try json.set("episodeId", episodeId)

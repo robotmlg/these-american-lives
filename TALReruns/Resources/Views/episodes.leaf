@@ -4,9 +4,17 @@
 
 #export("content") {
 <div class="row view-card">
-<div class="col">
-<h1>Episodes</h1>
+    <div class="col">
+        <h1>Episodes</h1>
+    </div>
 </div>
+<div class="row view-card">
+    <div class="col-sm-6">
+        #if(previousEnd) { <p><a href="/episodes/?start=#(previousStart)&end=#(previousEnd)">« Previous Episodes</a></p> }
+    </div>
+    <div class="col-sm-6">
+        #if(nextStart) { <p align="right"><a href="/episodes/?start=#(nextStart)&end=#(nextEnd)">Next Episodes »</a></p> }
+    </div>
 </div>
 #loop(episodes, "episode") {
 <div class="row view-card">
@@ -21,5 +29,13 @@
     </div>
 </div>
 }
+<div class="row view-card">
+    <div class="col-sm-6">
+        #if(previousEnd) { <p><a href="/episodes/?start=#(previousStart)&end=#(previousEnd)">« Previous Episodes</a></p> }
+    </div>
+    <div class="col-sm-6">
+        #if(nextStart) { <p align="right"><a href="/episodes/?start=#(nextStart)&end=#(nextEnd)">Next Episodes »</a></p> }
+    </div>
+</div>
 }
 
