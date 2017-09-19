@@ -43,6 +43,13 @@ final class EpisodeRepository {
         return airing
     }
     
+    func getAiringsForEpisode(_ episodeId: Int) throws -> [Airing] {
+        let airings = try Airing.makeQuery()
+                                .filter("episode_id", .equals, episodeId)
+                                .all()
+        return airings
+    }
+    
     func getLatestEpisodes(_ count: Int) throws -> [Episode] {
         let episodes = try Episode.makeQuery()
                                   .sort("episode_id", .descending)

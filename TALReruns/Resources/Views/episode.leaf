@@ -19,6 +19,16 @@
     </div>
 </div>
 <div class="row view-card">
+    <div class="col">
+        <h2>Airings of this Episode</h2>
+        <ul>
+#loop(airings, "airing") {
+                <li>#(airing.airDate)</li>
+}
+        </ul>
+    </div>
+</div>
+<div class="row view-card">
     <div class="col-sm-6">
         #if(previous) { <p><a href="/episodes/#(previous)">« Previous Episode</a></p> }
     </div>

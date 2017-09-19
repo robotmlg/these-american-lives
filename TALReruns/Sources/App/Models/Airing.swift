@@ -9,7 +9,7 @@
 import FluentProvider
 import Foundation
 
-final class Airing: Model, Preparation, JSONRepresentable {
+final class Airing: Model, Preparation, JSONRepresentable, Comparable {
     static let entity = "all_airings"
     let storage = Storage()
     
@@ -36,6 +36,32 @@ final class Airing: Model, Preparation, JSONRepresentable {
         originalAirDate = try row.get("original_air_date")
         airDate = try row.get("air_date")
         tag = ""
+    }
+    
+    init() {
+        episodeId = 0
+        title = ""
+        description = ""
+        imageUrl = ""
+        episodeUrl = ""
+        originalAirDate = Date()
+        airDate = Date()
+        tag = ""
+    }
+    
+    static func <(lhs: Airing, rhs: Airing) -> Bool {
+        return lhs.airDate < rhs.airDate
+    }
+    
+    static func ==(lhs: Airing, rhs: Airing) -> Bool {
+        return lhs.episodeId == rhs.episodeId &&
+               lhs.title == rhs.title &&
+               lhs.description == rhs.description &&
+               lhs.imageUrl == rhs.imageUrl &&
+               lhs.episodeUrl == rhs.episodeUrl &&
+               lhs.originalAirDate == rhs.originalAirDate &&
+               lhs.airDate == rhs.airDate &&
+               lhs.tag == rhs.tag
     }
     
     func makeRow() throws -> Row {

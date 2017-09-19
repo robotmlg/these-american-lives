@@ -11,7 +11,7 @@ let package = Package(
         .Package(url: "https://github.com/vapor/leaf-provider.git", majorVersion: 1),
         .Package(url: "https://github.com/vapor-community/postgresql-provider.git", majorVersion: 2),
         .Package(url: "https://github.com/BrettRToomey/Jobs.git", majorVersion: 1),
-        .Package(url: "https://github.com/tid-kijyun/Kanna.git", majorVersion: 2),
+        .Package(url: "https://github.com/scinfu/SwiftSoup", majorVersion: 1),
     ],
     exclude: [
         "Config",

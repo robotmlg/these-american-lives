@@ -14,8 +14,7 @@ try drop.setup()
 let fetcher = EpisodeFetcher()
 
 Jobs.oneoff {
-    let res = try drop.client.get("https://www.thisamericanlife.org")
-    try fetcher.fetch(String(describing: res.description))
+    try fetcher.fetch("https://www.thisamericanlife.org", with: drop)
 }
 
 try drop.run()
