@@ -30,7 +30,7 @@ final class CalendarController : ResourceRepresentable{
     
     /// GET /calendar
     func index(_ req: Request) throws -> ResponseRepresentable {
-        var episodes: [Airing]
+        var episodes: [AiringView]
         var previousStart: Date!
         var previousEnd: Date!
         var nextStart: Date!
@@ -91,7 +91,7 @@ final class CalendarController : ResourceRepresentable{
             ], for: req)
     }
     
-    func makeResource() -> Resource<Airing> {
+    func makeResource() -> Resource<AiringView> {
         return Resource(
             index: index
         )

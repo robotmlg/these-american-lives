@@ -20,7 +20,7 @@ final class EpisodesController : ResourceRepresentable{
     
     /// GET /episodes
     func index(_ req: Request) throws -> ResponseRepresentable {
-        var episodes: [Episode]
+        var episodes: [OriginalAiring]
         var previousStart: Int
         var previousEnd: Int
         var nextStart: Int
@@ -72,7 +72,7 @@ final class EpisodesController : ResourceRepresentable{
     }
     
     /// GET /episodes/:id
-    func show(_ req: Request, _ episode: Episode) throws -> ResponseRepresentable {
+    func show(_ req: Request, _ episode: OriginalAiring) throws -> ResponseRepresentable {
         let airings = try episodeRepository.getAiringsForEpisode(episode.episodeId).sorted()
         return try view.make("episode", [
             "episode": episode.makeJSON(),
@@ -82,7 +82,7 @@ final class EpisodesController : ResourceRepresentable{
         ], for: req)
     }
     
-    func makeResource() -> Resource<Episode> {
+    func makeResource() -> Resource<OriginalAiring> {
         return Resource(
             index: index,
             show: show

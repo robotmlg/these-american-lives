@@ -1,97 +1,75 @@
 //
 //  Airing.swift
-//  TALReruns
+//  App
 //
-//  Created by Matt Goldman on 9/9/17.
-//
+//  Created by Matt Goldman on 9/20/17.
 //
 
 import FluentProvider
 import Foundation
 
-final class Airing: Model, Preparation, JSONRepresentable, Comparable {
-    static let entity = "all_airings"
+final class Airing: Model, Preparation, JSONConvertible, ResponseRepresentable, Comparable {
+    static let entity = "airings"
+    static let idKey = "airing_id"
     let storage = Storage()
     
     // db fields
+    var airingId: Int
     var episodeId: Int
-    var title: String
-    var description: String
-    var imageUrl: String
-    var episodeUrl: String
-    var originalAirDate: Date
     var airDate: Date
     
-    // view-only fields
-    var tag: String
-    
-    static let formatter = DateFormatter()
-        
-    init(row: Row) throws {
-        episodeId = try row.get("episode_id")
-        title = try row.get("title")
-        description = try row.get("description")
-        imageUrl = try row.get("image_url")
-        episodeUrl = try row.get("episode_url")
-        originalAirDate = try row.get("original_air_date")
-        airDate = try row.get("air_date")
-        tag = ""
-    }
+    static let formatter: DateFormatter = {
+        let df = DateFormatter()
+        df.dateStyle = .long
+        return df
+    }()
     
     init() {
+        airingId = 0
         episodeId = 0
-        title = ""
-        description = ""
-        imageUrl = ""
-        episodeUrl = ""
-        originalAirDate = Date()
         airDate = Date()
-        tag = ""
     }
     
-    static func <(lhs: Airing, rhs: Airing) -> Bool {
+    init(row: Row) throws {
+        airingId = try row.get("airing_id")
+        episodeId = try row.get("episode_id")
+        airDate = try row.get("air_date")
+    }
+    
+    init(json: JSON) throws {
+        airingId = try json.get("airingId")
+        episodeId = try json.get("episodeId")
+        airDate = try Airing.formatter.date(from: json.get("airDate"))!
+    }
+    
+    static func <(lhs: Airing, rhs: Airing) -> Bool{
         return lhs.airDate < rhs.airDate
     }
     
-    static func ==(lhs: Airing, rhs: Airing) -> Bool {
-        return lhs.episodeId == rhs.episodeId &&
-               lhs.title == rhs.title &&
-               lhs.description == rhs.description &&
-               lhs.imageUrl == rhs.imageUrl &&
-               lhs.episodeUrl == rhs.episodeUrl &&
-               lhs.originalAirDate == rhs.originalAirDate &&
-               lhs.airDate == rhs.airDate &&
-               lhs.tag == rhs.tag
+    static func ==(lhs: Airing, rhs: Airing) -> Bool{
+        return lhs.episodeId == rhs.episodeId && lhs.airDate == rhs.airDate
     }
     
     func makeRow() throws -> Row {
-        return Row();
+        var row = Row()
+        try row.set("airing_id", airingId)
+        try row.set("episode_id", episodeId)
+        try row.set("air_date", airDate)
+        return row
     }
     
     func makeJSON() throws -> JSON {
-        Airing.formatter.dateStyle = .long
-        
         var json = JSON()
         
+        try json.set("airingId", airingId)
         try json.set("episodeId", episodeId)
-        try json.set("title", title)
-        try json.set("description", description)
-        try json.set("imageUrl", imageUrl)
-        try json.set("episodeUrl", episodeUrl)
-        try json.set("originalAirDate", Airing.formatter.string(from: originalAirDate))
         try json.set("airDate", Airing.formatter.string(from: airDate))
-        try json.set("tag", tag)
         
         return json
     }
     
-    func setTag(_ tag: String) -> Airing {
-        self.tag = tag
-        return self
-    }
-    
     static func prepare(_ database: Database) throws {}
-
+    
     static func revert(_ database: Database) throws {
         throw PreparationError.neverPrepared(Airing.self)
     }

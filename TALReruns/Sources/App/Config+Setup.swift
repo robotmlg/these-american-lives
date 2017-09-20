@@ -11,6 +11,8 @@ extension Config {
         
         self.preparations.append(Episode.self)
         self.preparations.append(Airing.self)
+        self.preparations.append(OriginalAiring.self)
+        self.preparations.append(AiringView.self)
 
     }
     

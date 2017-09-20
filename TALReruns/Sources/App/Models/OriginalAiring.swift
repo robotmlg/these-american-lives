@@ -1,15 +1,16 @@
 //
 //  Episode.swift
-//  App
+//  TALReruns
 //
-//  Created by Matt Goldman on 9/20/17.
+//  Created by Matt Goldman on 9/10/17.
+//
 //
 
 import FluentProvider
 import Foundation
 
-final class Episode: Model, Preparation, JSONConvertible, ResponseRepresentable {
-    static let entity = "episodes"
+final class OriginalAiring: Model, Preparation, JSONConvertible, ResponseRepresentable {
+    static let entity = "original_airings"
     static let idKey = "episode_id"
     let storage = Storage()
     
@@ -19,6 +20,7 @@ final class Episode: Model, Preparation, JSONConvertible, ResponseRepresentable 
     var description: String
     var imageUrl: String
     var episodeUrl: String
+    var originalAirDate: Date
     
     // view-only fields
     var tag: String
@@ -29,21 +31,13 @@ final class Episode: Model, Preparation, JSONConvertible, ResponseRepresentable 
         return df
     }()
     
-    init() {
-        episodeId = 0
-        title = ""
-        description = ""
-        imageUrl = ""
-        episodeUrl = ""
-        tag = ""
-    }
-    
     init(row: Row) throws {
         episodeId = try row.get("episode_id")
         title = try row.get("title")
         description = try row.get("description")
         imageUrl = try row.get("image_url")
         episodeUrl = try row.get("episode_url")
+        originalAirDate = try row.get("original_air_date")
         tag = ""
     }
     
@@ -53,17 +47,12 @@ final class Episode: Model, Preparation, JSONConvertible, ResponseRepresentable 
         description = try json.get("description")
         imageUrl = try json.get("imageUrl")
         episodeUrl = try json.get("episodeUrl")
+        originalAirDate = try OriginalAiring.formatter.date(from: json.get("originalAirDate"))!
         tag = try json.get("tag")
     }
     
     func makeRow() throws -> Row {
-        var row = Row()
-        try row.set("episode_id", episodeId)
-        try row.set("title", title)
-        try row.set("description", description)
-        try row.set("image_url", imageUrl)
-        try row.set("episode_url", episodeUrl)
-        return row
+        return Row();
     }
     
     func makeJSON() throws -> JSON {
@@ -74,12 +63,13 @@ final class Episode: Model, Preparation, JSONConvertible, ResponseRepresentable 
         try json.set("description", description)
         try json.set("imageUrl", imageUrl)
         try json.set("episodeUrl", episodeUrl)
+        try json.set("originalAirDate", OriginalAiring.formatter.string(from: originalAirDate))
         try json.set("tag", tag)
         
         return json
     }
     
-    func setTag(_ tag: String) -> Episode {
+    func setTag(_ tag: String) -> OriginalAiring {
         self.tag = tag
         return self
     }
@@ -87,7 +77,6 @@ final class Episode: Model, Preparation, JSONConvertible, ResponseRepresentable 
     static func prepare(_ database: Database) throws {}
     
     static func revert(_ database: Database) throws {
-        throw PreparationError.neverPrepared(Episode.self)
+        throw PreparationError.neverPrepared(OriginalAiring.self)
     }
 }
-

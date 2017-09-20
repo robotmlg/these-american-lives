@@ -22,7 +22,7 @@ final class SplashController {
         var latestEpisodes = try episodeRepository.getLatestAirings(3)
         
         // reorder episodes to This Week - Last Week - Next Week
-        var orderedEpisodes = [Airing]()
+        var orderedEpisodes = [AiringView]()
         orderedEpisodes.append(latestEpisodes[1].setTag("THIS WEEK"))
         orderedEpisodes.append(latestEpisodes[0].setTag("LAST WEEK"))
         orderedEpisodes.append(latestEpisodes[2].setTag("NEXT WEEK"))
