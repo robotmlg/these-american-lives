@@ -39,7 +39,7 @@ final class Episode: Model, Preparation, JSONConvertible, ResponseRepresentable 
     }
     
     init(row: Row) throws {
-        episodeId = try row.get("episode_id")
+        episodeId = try row.get(Episode.idKey)
         title = try row.get("title")
         description = try row.get("description")
         imageUrl = try row.get("image_url")
@@ -58,7 +58,7 @@ final class Episode: Model, Preparation, JSONConvertible, ResponseRepresentable 
     
     func makeRow() throws -> Row {
         var row = Row()
-        try row.set("episode_id", episodeId)
+        try row.set(Episode.idKey, episodeId)
         try row.set("title", title)
         try row.set("description", description)
         try row.set("image_url", imageUrl)

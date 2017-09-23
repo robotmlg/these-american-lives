@@ -20,36 +20,53 @@ public final class EpisodeFetcher {
     
     public init() {}
     
-    public func fetch(_ url: String, with: Droplet) throws {
-        let res = try with.client.get(url)
+    public func fetch(_ url: String, drop: Droplet) throws {
+        let res = try drop.client.get(url)
         let doc = try SwiftSoup.parse(res.description, url)
         let nodes = try doc.getElementsByClass("slider")
         
         for node in nodes {
             
-            guard let image = try node.getElementsByClass("image").first() else { return }
+            guard let image = try node.getElementsByClass("image").first()
+                else { return }
             let urlStub = try image.attr("href")
             let episodeUrl = url + urlStub
             
-            guard let link = try image.getElementsByClass("active").first() else { return }
+            guard let link = try image.getElementsByClass("active").first()
+                else { return }
             let imageUrlStub = try link.attr("src")
             let imageUrl = "https:" + imageUrlStub
             
-            guard let header = try node.getElementsByTag("h3").first()?.text() else { return }
+            guard let header = try node.getElementsByTag("h3").first()?.text()
+                else { return }
             guard let idx = header.characters.index(of: " ") else { return }
             let number = header.substring(to: header.index(before: idx))
             let title = header.substring(from: header.index(after: idx))
         
-            guard let dateString = try node.getElementsByClass("date").first()?.text() else { return }
-            guard let date = EpisodeFetcher.formatter.date(from: dateString) else { return }
+            guard let dateString = try node.getElementsByClass("date")
+                                           .first()?
+                                           .text()
+                else { return }
+            guard let date = EpisodeFetcher.formatter.date(from: dateString)
+                else { return }
             
             // get the description from the episode page to ensure getting the full text
-            let episodePage = try with.client.get(episodeUrl)
+            let episodePage = try drop.client.get(episodeUrl)
             let episodeHtml = try SwiftSoup.parse(episodePage.description, url)
 
-            guard let description = try episodeHtml.getElementsByClass("description").first()?.text() else { return }
-            guard let originalAirDateString = try doc.getElementsByClass("date").first()?.text() else { return }
-            guard let originalDate = EpisodeFetcher.formatter.date(from: originalAirDateString) else { return }
+            guard let episodeInfo = try episodeHtml.getElementsByClass("top-inner")
+                                                   .first()
+                else { return }
+            guard let description = try episodeInfo.getElementsByClass("description")
+                                                   .first()?
+                                                   .text()
+                else { return }
+            guard let originalAirDateString = try episodeInfo.getElementsByClass("date")
+                                                             .first()?
+                                                             .text()
+                else { return }
+            guard let originalDate = EpisodeFetcher.formatter.date(from: originalAirDateString)
+                else { return }
             
             let episode = Episode()
             let airing = Airing()
@@ -65,16 +82,23 @@ public final class EpisodeFetcher {
 
             // new episode
             if airing.airDate == originalDate {
-                if try Episode.find(episode.episodeId) == nil {
-                    try episode.save()
+                try drop.database?.transaction { conn in
+                    if try Episode.makeQuery(conn).find(episode.episodeId) == nil {
+                        print("NEW EPISODE FOUND")
+                        try episode.makeQuery(conn).save()
+                    }
+                    if try Airing.makeQuery(conn).filter("air_date", .equals, airing.airDate).first() == nil {
+                        try airing.makeQuery(conn).save()
+                    }
                 }
-                try airing.save()
             }
             else {  // IT'S A RERUN! It's the whole purpose of this goddamn site!
-                print("WE GOT ONE!!!!")
-                print(episode)
-                print(airing)
-                try airing.save()
+                try drop.database?.transaction { conn in
+                    if try Airing.makeQuery(conn).filter("air_date", .equals, airing.airDate).first() == nil {
+                        print("WE GOT A RERUN, BOYS!!!!")
+                        try airing.makeQuery(conn).save()
+                    }
+                }
             }
         }
     }

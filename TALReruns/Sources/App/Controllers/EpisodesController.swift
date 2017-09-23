@@ -73,7 +73,7 @@ final class EpisodesController : ResourceRepresentable{
     
     /// GET /episodes/:id
     func show(_ req: Request, _ episode: OriginalAiring) throws -> ResponseRepresentable {
-        let airings = try episodeRepository.getAiringsForEpisode(episode.episodeId).sorted()
+        let airings = try episodeRepository.getAiringsForEpisode(episode.episodeId).sorted().reversed()
         return try view.make("episode", [
             "episode": episode.makeJSON(),
             "airings": airings.makeJSON(),
