@@ -8,13 +8,11 @@
 import FluentProvider
 import Foundation
 
-final class Episode: Model, Preparation, JSONConvertible, ResponseRepresentable {
+final class Episode: Model, Preparation, JSONRepresentable, ResponseRepresentable {
     static let entity = "episodes"
-    static let idKey = "episode_id"
     let storage = Storage()
     
     // db fields
-    var episodeId: Int
     var title: String
     var description: String
     var imageUrl: String
@@ -30,7 +28,6 @@ final class Episode: Model, Preparation, JSONConvertible, ResponseRepresentable 
     }()
     
     init() {
-        episodeId = 0
         title = ""
         description = ""
         imageUrl = ""
@@ -39,26 +36,15 @@ final class Episode: Model, Preparation, JSONConvertible, ResponseRepresentable 
     }
     
     init(row: Row) throws {
-        episodeId = try row.get(Episode.idKey)
         title = try row.get("title")
         description = try row.get("description")
         imageUrl = try row.get("image_url")
         episodeUrl = try row.get("episode_url")
         tag = ""
     }
-    
-    init(json: JSON) throws {
-        episodeId = try json.get("episodeId")
-        title = try json.get("title")
-        description = try json.get("description")
-        imageUrl = try json.get("imageUrl")
-        episodeUrl = try json.get("episodeUrl")
-        tag = try json.get("tag")
-    }
-    
+
     func makeRow() throws -> Row {
         var row = Row()
-        try row.set(Episode.idKey, episodeId)
         try row.set("title", title)
         try row.set("description", description)
         try row.set("image_url", imageUrl)
@@ -69,7 +55,7 @@ final class Episode: Model, Preparation, JSONConvertible, ResponseRepresentable 
     func makeJSON() throws -> JSON {
         var json = JSON()
         
-        try json.set("episodeId", episodeId)
+        try json.set("episodeId", id)
         try json.set("title", title)
         try json.set("description", description)
         try json.set("imageUrl", imageUrl)

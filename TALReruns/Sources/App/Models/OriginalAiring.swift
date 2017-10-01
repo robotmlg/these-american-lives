@@ -9,7 +9,7 @@
 import FluentProvider
 import Foundation
 
-final class OriginalAiring: Model, Preparation, JSONConvertible, ResponseRepresentable {
+final class OriginalAiring: Model, Preparation, JSONRepresentable, ResponseRepresentable {
     static let entity = "original_airings"
     static let idKey = "episode_id"
     let storage = Storage()
@@ -39,16 +39,6 @@ final class OriginalAiring: Model, Preparation, JSONConvertible, ResponseReprese
         episodeUrl = try row.get("episode_url")
         originalAirDate = try row.get("original_air_date")
         tag = ""
-    }
-    
-    init(json: JSON) throws {
-        episodeId = try json.get("episodeId")
-        title = try json.get("title")
-        description = try json.get("description")
-        imageUrl = try json.get("imageUrl")
-        episodeUrl = try json.get("episodeUrl")
-        originalAirDate = try OriginalAiring.formatter.date(from: json.get("originalAirDate"))!
-        tag = try json.get("tag")
     }
     
     func makeRow() throws -> Row {

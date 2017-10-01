@@ -70,20 +70,22 @@ public final class EpisodeFetcher {
             
             let episode = Episode()
             let airing = Airing()
+            let episodeId = Int(number)!
             
-            episode.episodeId = Int(number)!
+            episode.id = Identifier(episodeId)
             episode.title = title
             episode.episodeUrl = episodeUrl
             episode.imageUrl = imageUrl
             episode.description = description
             
-            airing.episodeId = episode.episodeId
+            
+            airing.episodeId = episodeId
             airing.airDate = date
 
             // new episode
             if airing.airDate == originalDate {
                 try drop.database?.transaction { conn in
-                    if try Episode.makeQuery(conn).find(episode.episodeId) == nil {
+                    if try Episode.makeQuery(conn).find(episodeId) == nil {
                         print("NEW EPISODE FOUND")
                         try episode.makeQuery(conn).save()
                     }

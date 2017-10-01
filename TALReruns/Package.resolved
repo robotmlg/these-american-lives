@@ -87,8 +87,8 @@
         "repositoryURL": "https://github.com/vapor/fluent.git",
         "state": {
           "branch": null,
-          "revision": "271ab0e0b9a81d0befc2673332715c3384f186bf",
-          "version": "2.4.0"
+          "revision": "9f94af35b177b5a5fdc40a81703e68c072c5013d",
+          "version": "2.4.1"
         }
       },
       {
@@ -96,8 +96,8 @@
         "repositoryURL": "https://github.com/vapor/fluent-provider.git",
         "state": {
           "branch": null,
-          "revision": "baaa6091c175382661d3a8a2b2ecb440986a37cb",
-          "version": "1.1.1"
+          "revision": "3bb67ad0be2df74367087e90391436b4336e7962",
+          "version": "1.2.0"
         }
       },
       {
@@ -165,11 +165,11 @@
       },
       {
         "package": "PostgreSQLDriver",
-        "repositoryURL": "https://github.com/vapor/postgresql-driver.git",
+        "repositoryURL": "https://github.com/vapor-community/postgresql-driver.git",
         "state": {
           "branch": null,
-          "revision": "283a56e30f8e3a6bd77c9e1c6791b8b22f40fede",
-          "version": "2.0.1"
+          "revision": "a8a410d4291094b0adc4ebb49adbc9d9310567ef",
+          "version": "2.1.0"
         }
       },
       {
@@ -177,8 +177,8 @@
         "repositoryURL": "https://github.com/vapor-community/postgresql-provider.git",
         "state": {
           "branch": null,
-          "revision": "89cb3159f208ee6a2c241c135ebb069191fb6fbc",
-          "version": "2.0.0"
+          "revision": "28eda35d9887172d3f3e5769db603339d3e88f05",
+          "version": "2.1.0"
         }
       },
       {
@@ -204,8 +204,8 @@
         "repositoryURL": "https://github.com/vapor/sqlite.git",
         "state": {
           "branch": null,
-          "revision": "f110cbe9ff5283eca7d2edf1b8ee69dfb8b666d6",
-          "version": "2.2.0"
+          "revision": "9aceb6a0d7b1698a557647493bd78b030dad468b",
+          "version": "2.3.1"
         }
       },
       {
@@ -222,8 +222,8 @@
         "repositoryURL": "https://github.com/scinfu/SwiftSoup",
         "state": {
           "branch": null,
-          "revision": "5e826168ea65558603e4ee48b074557b39ed3c7b",
-          "version": "1.4.2"
+          "revision": "4a4ab9534be3f9a7f52bbc3862427300e45b8124",
+          "version": "1.5.1"
         }
       },
       {

@@ -24,8 +24,8 @@ final class SplashController {
         // reorder episodes to This Week - Last Week - Next Week
         var orderedEpisodes = [AiringView]()
         orderedEpisodes.append(latestEpisodes[1].setTag("THIS WEEK"))
-        orderedEpisodes.append(latestEpisodes[0].setTag("LAST WEEK"))
-        orderedEpisodes.append(latestEpisodes[2].setTag("NEXT WEEK"))
+        orderedEpisodes.append(latestEpisodes[2].setTag("LAST WEEK"))
+        orderedEpisodes.append(latestEpisodes[0].setTag("NEXT WEEK"))
         
         return try view.make("splash", [
             "episodes": orderedEpisodes.makeJSON(),
