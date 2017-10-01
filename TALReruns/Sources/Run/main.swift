@@ -13,7 +13,7 @@ try drop.setup()
 
 let fetcher = EpisodeFetcher()
 
-Jobs.oneoff {
+Jobs.add(interval: .hours(1)) {
     try fetcher.fetch("https://www.thisamericanlife.org", drop: drop)
 }
 
