@@ -23,6 +23,7 @@ final class Episode: Model, Preparation, JSONRepresentable, ResponseRepresentabl
     
     static let formatter: DateFormatter = {
         let df = DateFormatter()
+        df.timeZone = TimeZone(secondsFromGMT: 0)
         df.dateStyle = .long
         return df
     }()

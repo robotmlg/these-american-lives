@@ -18,6 +18,7 @@ final class Airing: Model, Preparation, JSONRepresentable, ResponseRepresentable
     
     static let formatter: DateFormatter = {
         let df = DateFormatter()
+        df.timeZone = TimeZone(secondsFromGMT: 0)
         df.dateStyle = .long
         return df
     }()

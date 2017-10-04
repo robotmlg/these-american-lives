@@ -14,6 +14,7 @@ public final class EpisodeFetcher {
 
     static let formatter: DateFormatter = {
         let df = DateFormatter()
+        df.timeZone = TimeZone(secondsFromGMT: 0)
         df.dateStyle = .medium
         return df
     }()

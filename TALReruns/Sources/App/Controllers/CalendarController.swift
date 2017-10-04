@@ -24,6 +24,7 @@ final class CalendarController : ResourceRepresentable{
     
     let dateFormatter: DateFormatter = {
         let df = DateFormatter()
+        df.timeZone = TimeZone(secondsFromGMT: 0)
         df.dateFormat = "yyyyMMdd"
         return df
     }()
@@ -41,7 +42,9 @@ final class CalendarController : ResourceRepresentable{
         
         let startString = startNode?.string
         let endString = endNode?.string
-        
+
+        let calendar = NSCalendar.current
+
         if startString != nil && endString != nil {
             guard let start = dateFormatter.date(from: startString!) else { return try view.make("calendar", [], for: req) }
             guard let end   = dateFormatter.date(from: endString!)   else { return try view.make("calendar", [], for: req) }
@@ -55,33 +58,47 @@ final class CalendarController : ResourceRepresentable{
                 previousEnd = Date()
             }
             else {
-                let calendar = NSCalendar.current
                 let startTime = calendar.startOfDay(for: start)
                 let endTime = calendar.startOfDay(for: end)
                 let delta = abs(Double(calendar.dateComponents([.day], from: startTime, to: endTime).day!)) * CalendarController.oneDay
                 if (start < end) { // ascending order
-                    nextStart = end + CalendarController.oneDay
-                    nextEnd = nextStart + delta
+                    if end > Date() {
+                        nextStart = Date()
+                        nextEnd = Date()
+                    }
+                    else {
+                        nextStart = end + CalendarController.oneDay
+                        nextEnd = nextStart + delta
+                    }
                     previousEnd = start - CalendarController.oneDay
                     previousStart = previousEnd - delta
                 }
                 else { // start > end, descending order
                     nextStart = end - CalendarController.oneDay
                     nextEnd = nextStart - delta
-                    previousEnd = start + CalendarController.oneDay
-                    previousStart = previousEnd + delta
+
+                    if start > Date() {
+                        previousStart = Date()
+                        previousEnd = Date()
+                    }
+                    else {
+                        previousEnd = start + CalendarController.oneDay
+                        previousStart = previousEnd + delta
+                    }
                 }
             }
         }
         else {
             episodes = try episodeRepository.getLatestAirings(25)
+            let startTime = calendar.startOfDay(for: episodes.last!.airDate)
+            let endTime = calendar.startOfDay(for: episodes.first!.airDate)
+            let delta = abs(Double(calendar.dateComponents([.day], from: startTime, to: endTime).day!)) * CalendarController.oneDay
             previousStart = Date()
             previousEnd = Date()
             nextStart = episodes.last!.airDate - CalendarController.oneDay
-            nextEnd = nextStart! - CalendarController.oneWeek * 25
+            nextEnd = nextStart! - delta
         }
 
-        
         return try view.make("calendar", [
             "episodes": episodes.makeJSON(),
             "previousStart": dateFormatter.string(from: previousStart),
