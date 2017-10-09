@@ -14,10 +14,13 @@ let drop = try Droplet(config)
 
 try drop.setup()
 
-let fetcher = EpisodeFetcher()
+let fetcher = EpisodeFetcher(drop: drop)
+
+try fetcher.intializeEpisodes()
+try fetcher.scrapeNewEpisodes()
 
 Jobs.add(interval: .hours(1)) {
-    try fetcher.fetch("https://www.thisamericanlife.org", drop: drop)
+    try fetcher.scrapeNewEpisodes()
 }
 
 try drop.run()

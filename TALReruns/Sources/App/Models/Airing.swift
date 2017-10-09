@@ -27,6 +27,11 @@ final class Airing: Model, Preparation, JSONRepresentable, ResponseRepresentable
         episodeId = 0
         airDate = Date()
     }
+
+    init(episodeId: Int, airDate: Date) {
+        self.episodeId = episodeId
+        self.airDate = airDate
+    }
     
     init(row: Row) throws {
         episodeId = try row.get("episode_id")

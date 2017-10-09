@@ -12,10 +12,6 @@ CREATE TABLE IF NOT EXISTS airings(
   , air_date TIMESTAMP UNIQUE NOT NULL
 );  
 
-COPY episodes FROM '/Volumes/Mac Data/Code/TALReruns/episodes20170902.csv' WITH (FORMAT csv, HEADER TRUE);
-
-COPY airings (episode_id, air_date) FROM '/Volumes/Mac Data/Code/TALReruns/original_airdates.csv' WITH (FORMAT csv, HEADER TRUE);
-
 CREATE OR REPLACE VIEW original_airings AS
 	SELECT 
 		e.id AS episode_id,

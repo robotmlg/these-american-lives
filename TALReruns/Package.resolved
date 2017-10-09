@@ -101,6 +101,15 @@
         }
       },
       {
+        "package": "Forms",
+        "repositoryURL": "https://github.com/vapor-community/forms.git",
+        "state": {
+          "branch": null,
+          "revision": "f7867299d2bf56473ffcdb7223104bca7470c97e",
+          "version": "1.0.0-beta.1"
+        }
+      },
+      {
         "package": "JSON",
         "repositoryURL": "https://github.com/vapor/json.git",
         "state": {
@@ -242,6 +251,24 @@
           "branch": null,
           "revision": "6c6eedb6761cddc6b6c87142a27eec13fa1701ec",
           "version": "2.1.1"
+        }
+      },
+      {
+        "package": "Validation",
+        "repositoryURL": "https://github.com/vapor/validation.git",
+        "state": {
+          "branch": null,
+          "revision": "ad5d3240ca105e0125d7cfe5770bbd2452cd8458",
+          "version": "1.1.0"
+        }
+      },
+      {
+        "package": "ValidationProvider",
+        "repositoryURL": "https://github.com/vapor/validation-provider.git",
+        "state": {
+          "branch": null,
+          "revision": "26e51591a40bb11383c3a0f8039c4b8c0cbe1a1f",
+          "version": "1.2.0"
         }
       },
       {
