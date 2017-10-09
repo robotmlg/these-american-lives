@@ -16,7 +16,7 @@ $ vapor build
 ```
 
 ## Run
-1. Setup the db schema according to `schema.sql`.  Update the paths in here to point to your data files, if you want to import episode data
+1. Setup the db schema according to `schema.sql`.
 2. Add a `TALReruns/Config/postgresl.json` with your db information
 ```
 {
