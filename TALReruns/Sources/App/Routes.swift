@@ -33,10 +33,5 @@ final class Routes: RouteCollection {
         builder.get("about") { request in
             return try self.view.make("about")
         }
-        
-        /// 404 page
-        builder.get("404") { request in
-            return try self.view.make("404")
-        }
     }
 }

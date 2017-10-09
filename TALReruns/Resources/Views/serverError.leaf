@@ -1,11 +1,11 @@
 #extend("base")
 
-#export("title") { These American Lives - Page Not Found }
+#export("title") { These American Lives - Server Error }
 
 #export("content") {
 <div class="row view-card">
 <div class="col">
-<h1>Page Not Found</h1>
+<h1>#(status) - #(statusMessage)</h1>
 </div>
 </div>
 }

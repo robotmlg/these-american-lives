@@ -1,8 +1,11 @@
 import App
 import Jobs
+import LeafErrorMiddleware
 
 // configure server
 let config = try Config()
+
+config.addConfigurable(middleware: LeafErrorMiddleware.init, name: "leaf-error")
 
 try config.setup()
 
