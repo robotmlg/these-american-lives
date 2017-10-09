@@ -16,7 +16,6 @@ $ vapor build
 ```
 
 ## Run
-0. (Optional) Run `python3 scraper.py` to scrape the latest episode data.  You'll need to split up the single output file from this into two files, one of episode data, one of airing data, as the included csvs show.
 1. Setup the db schema according to `schema.sql`.  Update the paths in here to point to your data files, if you want to import episode data
 2. Add a `TALReruns/Config/postgresl.json` with your db information
 ```
@@ -28,9 +27,8 @@ $ vapor build
     "port": 5432
 }
 ```
-3. `$ vapor run serve`
+3. `$ vapor run serve`.  The app will scrape all needed episodes from thisamericanlife.org, and any re-runs shown on the homepage
 
 # What's next?
 - [ ] Copy images locally so I'm not hot-linking thisamericanlife.org (sorry guys) and nothing breaks if the image is changed
 - [ ] User submission of past re-runs
-- [ ] Replace Python script with Swift to load existing episodes from thisamericanlife.org on boot, if not found in the database already
