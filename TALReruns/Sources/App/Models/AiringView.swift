@@ -93,9 +93,19 @@ final class AiringView: Model, Preparation, JSONRepresentable, Comparable {
         return self
     }
     
-    static func prepare(_ database: Database) throws {}
+    static func prepare(_ database: Database) throws {
+        try database.raw("""
+            CREATE OR REPLACE VIEW all_airings AS
+                SELECT o.*, a.air_date
+                FROM original_airings o
+                    INNER JOIN airings a
+                        ON o.episode_id = a.episode_id;
+        """)
+    }
 
     static func revert(_ database: Database) throws {
-        throw PreparationError.neverPrepared(AiringView.self)
+        try database.raw("""
+            DROP VIEW IF EXISTS all_airings;
+        """)
     }
 }

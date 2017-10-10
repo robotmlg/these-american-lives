@@ -71,10 +71,20 @@ final class Episode: Model, Preparation, JSONRepresentable, ResponseRepresentabl
         return self
     }
     
-    static func prepare(_ database: Database) throws {}
+    static func prepare(_ database: Database) throws {
+        try database.raw("""
+            CREATE TABLE IF NOT EXISTS episodes(
+                id INTEGER PRIMARY KEY
+                , title VARCHAR(256) NOT NULL
+                , description TEXT NOT NULL
+                , image_url VARCHAR(512) NOT NULL
+                , episode_url VARCHAR(512) NOT NULL
+            );
+        """)
+    }
     
     static func revert(_ database: Database) throws {
-        throw PreparationError.neverPrepared(Episode.self)
+        try database.delete(self)
     }
 }
 

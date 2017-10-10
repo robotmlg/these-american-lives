@@ -65,9 +65,29 @@ final class OriginalAiring: Model, Preparation, JSONRepresentable, ResponseRepre
         return self
     }
     
-    static func prepare(_ database: Database) throws {}
+    static func prepare(_ database: Database) throws {
+        try database.raw("""
+            CREATE OR REPLACE VIEW original_airings AS
+                SELECT
+                    e.id AS episode_id,
+                    e.title AS title,
+                    e.description AS description,
+                    e.image_url AS image_url,
+                    e.episode_url AS episode_url,
+                    tbl.original_air_date AS original_air_date
+                FROM episodes e
+                    INNER JOIN (
+                        SELECT episode_id, MIN(air_date) original_air_date
+                        FROM airings a
+                        GROUP BY a.episode_id
+                    ) tbl
+                        ON e.id = tbl.episode_id;
+        """)
+    }
     
     static func revert(_ database: Database) throws {
-        throw PreparationError.neverPrepared(OriginalAiring.self)
+        try database.raw("""
+            DROP VIEW IF EXISTS original_airings;
+        """)
     }
 }

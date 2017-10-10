@@ -63,9 +63,17 @@ final class Airing: Model, Preparation, JSONRepresentable, ResponseRepresentable
         return json
     }
     
-    static func prepare(_ database: Database) throws {}
+    static func prepare(_ database: Database) throws {
+        try database.raw("""
+            CREATE TABLE IF NOT EXISTS airings(
+                id SERIAL PRIMARY KEY
+                , episode_id INTEGER NOT NULL REFERENCES episodes (id)
+                , air_date TIMESTAMP UNIQUE NOT NULL
+            );
+        """)
+    }
     
     static func revert(_ database: Database) throws {
-        throw PreparationError.neverPrepared(Airing.self)
+        try database.delete(self)
     }
 }
