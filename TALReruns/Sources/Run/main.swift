@@ -17,7 +17,6 @@ try drop.setup()
 let fetcher = EpisodeFetcher(drop: drop)
 
 try fetcher.intializeEpisodes()
-try fetcher.scrapeNewEpisodes()
 
 Jobs.add(interval: .hours(1)) {
     try fetcher.scrapeNewEpisodes()
