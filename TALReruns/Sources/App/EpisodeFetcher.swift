@@ -113,6 +113,26 @@ public final class EpisodeFetcher {
         }
     }
 
+    private func downloadAndSaveImage(_ url: String) throws -> String {
+        let fileManager = FileManager.default
+        let imagesPath = drop.config.publicDir + "images"
+        guard let fileNameBytes = url.split(separator: "/").last
+            else { return "" }
+        let fileName = String(fileNameBytes)
+        let filePath = imagesPath + "/" + fileName
+        guard let imageData = try drop.client.get(url).body.bytes
+            else { return "" }
+
+        if !fileManager.fileExists(atPath: imagesPath) {
+            try fileManager.createDirectory(atPath: imagesPath, withIntermediateDirectories: true)
+        }
+        if !fileManager.fileExists(atPath: filePath) {
+            fileManager.createFile(atPath: filePath, contents: Data(bytes: imageData))
+        }
+
+        return "/images/" + fileName
+    }
+
     private func scrapeEpisodePage(_ url: String) throws -> (Episode, Airing) {
         print("Scraping episode page \(url)")
         var episodePage = try drop.client.get(url)
@@ -138,6 +158,8 @@ public final class EpisodeFetcher {
         else {
             imageUrl = ""
         }
+
+        let localImage = try downloadAndSaveImage(imageUrl)
 
         guard let header = try episodeInfo.getElementsByTag("h1")
                                           .first()?
@@ -167,7 +189,7 @@ public final class EpisodeFetcher {
         episode.id = Identifier(episodeId)
         episode.title = title
         episode.episodeUrl = url
-        episode.imageUrl = imageUrl
+        episode.imageUrl = localImage
         episode.description = description
 
 
