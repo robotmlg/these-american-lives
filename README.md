@@ -30,5 +30,4 @@ $ vapor build
 3. `$ vapor run serve`.  The app will scrape all needed episodes from thisamericanlife.org, and any re-runs shown on the homepage
 
 # What's next?
-- [ ] Copy images locally so I'm not hot-linking thisamericanlife.org (sorry guys) and nothing breaks if the image is changed
 - [ ] User submission of past re-runs
