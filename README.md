@@ -31,3 +31,4 @@ $ vapor build
 # What's next?
 - [ ] User submission of past re-runs via a real form instead of some Google crap
 - [ ] Pre-air episodes change their images when they air.  Update the scrape job to pull the new image.
+- [ ] Better design from someone who actually know what they're doing
