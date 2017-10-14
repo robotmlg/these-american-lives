@@ -31,3 +31,4 @@ $ vapor build
 
 # What's next?
 - [ ] User submission of past re-runs
+- [ ] Pre-air episodes change their images when they air.  Update the scrape job to pull the new image.
