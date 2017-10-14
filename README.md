@@ -16,8 +16,7 @@ $ vapor build
 ```
 
 ## Run
-1. Setup the db schema according to `schema.sql`.
-2. Add a `TALReruns/Config/postgresl.json` with your db information
+1. Add a `TALReruns/Config/postgresl.json` with your db information
 ```
 {
     "hostname": "127.0.0.1",
@@ -27,8 +26,8 @@ $ vapor build
     "port": 5432
 }
 ```
-3. `$ vapor run serve`.  The app will scrape all needed episodes from thisamericanlife.org, and any re-runs shown on the homepage
+2. `$ vapor run serve`.  The app will scrape all needed episodes from thisamericanlife.org, and any re-runs shown on the homepage
 
 # What's next?
-- [ ] User submission of past re-runs
+- [ ] User submission of past re-runs via a real form instead of some Google crap
 - [ ] Pre-air episodes change their images when they air.  Update the scrape job to pull the new image.
