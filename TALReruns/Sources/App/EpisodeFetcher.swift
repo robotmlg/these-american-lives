@@ -89,11 +89,20 @@ public final class EpisodeFetcher {
         // new episode
         if airing == nil || airing!.airDate == originalAiring.airDate {
             try drop.database?.transaction { conn in
-                if try Episode.makeQuery(conn)
-                              .find(episode.id) == nil {
+                if let existingEpisode = try Episode.makeQuery(conn)
+                                                    .find(episode.id) {
+                    print("Episode already exists")
+                    if existingEpisode.imageUrl != episode.imageUrl {
+                        print("Updating image URL")
+                        existingEpisode.imageUrl = episode.imageUrl
+                        try existingEpisode.makeQuery(conn).save()
+                    }
+                }
+                else {
                     print("NEW EPISODE FOUND")
                     try episode.makeQuery(conn).save()
                 }
+
                 if try Airing.makeQuery(conn)
                              .filter("air_date", .equals, originalAiring.airDate)
                              .first() == nil {
