@@ -54,6 +54,18 @@ public final class EpisodeFetcher {
             let episode = try scrapeEpisodePage(episodeUrl)
             episodes.append(episode)
         }
+        // update recent 25 episodes
+        for id in maxEpisodeId!-25...maxEpisodeId! {
+            let episodeUrl = EpisodeFetcher.episodeBaseUrl + String(id)
+            do {
+                let episode = try scrapeEpisodePage(episodeUrl)
+                try processEpisode(episode.0, originalAiring: episode.1)
+            }
+            catch {
+                print("\(error)")
+                break
+            }
+        }
         // get any future episodes
         var nextEpisodeId = maxEpisodeId!
         while true {
@@ -64,6 +76,7 @@ public final class EpisodeFetcher {
                 nextEpisodeId += 1
             }
             catch {
+                print("\(error)")
                 break
             }
         }
