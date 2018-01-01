@@ -14,6 +14,7 @@ public final class EpisodeFetcher {
 
     static let baseUrl = "https://www.thisamericanlife.org"
     static let episodeBaseUrl = baseUrl + "/radio-archives/episode/"
+    static let twoDays : Double = 2 * 24 * 60 * 60
 
     static let formatter: DateFormatter = {
         let df = DateFormatter()
@@ -92,9 +93,13 @@ public final class EpisodeFetcher {
                 if let existingEpisode = try Episode.makeQuery(conn)
                                                     .find(episode.id) {
                     print("Episode already exists")
-                    if existingEpisode.imageUrl != episode.imageUrl {
-                        print("Updating image URL")
+                    if existingEpisode.imageUrl != episode.imageUrl ||
+                       existingEpisode.title != episode.title ||
+                       existingEpisode.description != episode.description {
+                        print("Updating image info")
                         existingEpisode.imageUrl = episode.imageUrl
+                        existingEpisode.title = episode.title
+                        existingEpisode.description = episode.description
                         try existingEpisode.makeQuery(conn).save()
                     }
                 }
@@ -112,11 +117,21 @@ public final class EpisodeFetcher {
         }
         else {  // IT'S A RERUN! It's the whole purpose of this goddamn site!
             try drop.database?.transaction { conn in
-                if try Airing.makeQuery(conn)
-                             .filter("air_date", .equals, airing!.airDate)
-                             .first() == nil {
+
+                let existingAiring = try Airing.makeQuery(conn)
+                    .filter("episode_id", .equals, airing?.episodeId)
+                    .filter("air_date", .greaterThanOrEquals, airing!.airDate - EpisodeFetcher.twoDays)
+                    .filter("air_date", .lessThanOrEquals, airing!.airDate + EpisodeFetcher.twoDays)
+                    .first()
+
+                if existingAiring == nil {
                     print("WE GOT A RERUN, BOYS!!!!")
                     try airing!.makeQuery(conn).save()
+                }
+                else {
+                    print("Updating date on existing airing because Ira Glass can't code properly")
+                    existingAiring?.airDate = max(airing!.airDate, existingAiring!.airDate)
+                    try existingAiring!.makeQuery(conn).save()
                 }
             }
         }
@@ -174,7 +189,7 @@ public final class EpisodeFetcher {
                                           .first()?
                                           .text()
             else { throw Error.invalidEpisodePageError }
-        guard let idx = header.characters.index(of: " ")
+        guard let idx = header.index(of: " ")
             else { throw Error.invalidEpisodePageError }
         let number = header.substring(to: header.index(before: idx))
         let title = header.substring(from: header.index(after: idx))
@@ -217,7 +232,7 @@ public final class EpisodeFetcher {
         let episodeUrl = EpisodeFetcher.baseUrl + urlStub
 
         let headerString = try link.text()
-        guard let idx = headerString.characters.index(of: " ")
+        guard let idx = headerString.index(of: " ")
             else { throw Error.invalidSplashPageError }
         let number = headerString.substring(to: headerString.index(before: idx))
         let episodeId = Int(number)!
