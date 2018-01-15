@@ -47,24 +47,11 @@ public final class EpisodeFetcher {
         }
         let missingIds = allEpisodeIds.subtracting(existingEpisodeIds)
 
-        var episodes: [(Episode, Airing)] = []
         // get missing episodes
         for id in missingIds {
             let episodeUrl = EpisodeFetcher.episodeBaseUrl + String(id)
             let episode = try scrapeEpisodePage(episodeUrl)
-            episodes.append(episode)
-        }
-        // update recent 25 episodes
-        for id in maxEpisodeId!-25...maxEpisodeId! {
-            let episodeUrl = EpisodeFetcher.episodeBaseUrl + String(id)
-            do {
-                let episode = try scrapeEpisodePage(episodeUrl)
-                try processEpisode(episode.0, originalAiring: episode.1)
-            }
-            catch {
-                print("\(error)")
-                break
-            }
+            try processEpisode(episode.0, originalAiring: episode.1)
         }
         // get any future episodes
         var nextEpisodeId = maxEpisodeId!
@@ -83,18 +70,12 @@ public final class EpisodeFetcher {
     }
 
     public func scrapeNewEpisodes() throws {
-        let res = try drop.client.get(EpisodeFetcher.baseUrl)
-        let doc = try SwiftSoup.parse(res.description, EpisodeFetcher.baseUrl)
-        let nodes = try doc.getElementsByClass("slider")
-        
-        for node in nodes {
-            let (episodeUrl, airing) = try parseAiringFromHomepageSlide(node)
+        let (episodeUrl, airing) = try parseAiringFromHomepage()
 
-            // get the description from the episode page to ensure getting the full text
-            let (episode, originalAiring) = try scrapeEpisodePage(episodeUrl)
+        // get the description from the episode page to ensure getting the full text
+        let (episode, originalAiring) = try scrapeEpisodePage(episodeUrl)
 
-            try processEpisode(episode, originalAiring: originalAiring, airing: airing)
-        }
+        try processEpisode(episode, originalAiring: originalAiring, airing: airing)
     }
 
     private func processEpisode(_ episode: Episode,
@@ -155,7 +136,12 @@ public final class EpisodeFetcher {
         let imagesPath = drop.config.publicDir + "images"
         guard let fileNameBytes = url.split(separator: "/").last
             else { return "" }
-        let fileName = String(fileNameBytes)
+        var fileName = String(fileNameBytes)
+
+        if let endIdx = fileName.index(of: "?") {
+            fileName = String(describing: fileName[..<endIdx])
+        }
+
         let filePath = imagesPath + "/" + fileName
         guard let imageData = try drop.client.get(url).body.bytes
             else { return "" }
@@ -172,25 +158,42 @@ public final class EpisodeFetcher {
 
     private func scrapeEpisodePage(_ url: String) throws -> (Episode, Airing) {
         print("Scraping episode page \(url)")
-        var episodePage = try drop.client.get(url)
+        var episodeUrl = url
+        var episodePage = try drop.client.get(episodeUrl)
         if (episodePage.status == .movedPermanently) {
-            let newUrl = episodePage.headers["Location"]!
-            episodePage = try drop.client.get(newUrl)
+            episodeUrl = episodePage.headers["Location"]!
+            episodePage = try drop.client.get(episodeUrl)
         }
         else if (episodePage.status != .ok) {
             throw Error.invalidEpisodePageError
         }
         let episodeHtml = try SwiftSoup.parse(episodePage.description, url)
-
-        guard let episodeInfo = try episodeHtml.getElementsByClass("top-inner")
-                                               .first()
+        guard let episodeHeader = try episodeHtml.getElementsByClass("episode-header").first()
             else { throw Error.invalidEpisodePageError }
 
-        let image = try episodeInfo.getElementsByTag("img").first()
+        guard let titleBlock = try episodeHeader.getElementsByClass("episode-title").first()
+            else {throw Error.invalidEpisodePageError }
+        guard let title = try titleBlock.getElementsByTag("h1").first()?.text()
+            else {throw Error.invalidEpisodePageError }
+
+        guard let number = try episodeHeader.getElementsByClass("field-name-field-episode-number").first()?.text()
+            else {throw Error.invalidEpisodePageError }
+
+        guard let dateString = try episodeHeader.getElementsByClass("field-name-field-radio-air-date").first()?.text()
+            else {throw Error.invalidEpisodePageError }
+        guard let airDate = EpisodeFetcher.formatter.date(from: dateString)
+            else { throw Error.invalidEpisodePageError }
+
+        guard let description = try episodeHeader.getElementsByClass("field-type-text-with-summary").first()?.text()
+            else { throw Error.invalidEpisodePageError }
+
+        let image = try episodeHtml.getElementsByClass("episode-image").first()?.getElementsByTag("img").first()
         var imageUrl: String
         if image != nil {
-            let imageUrlStub = try image!.attr("src")
-            imageUrl = "https:" + imageUrlStub
+            imageUrl = try image!.attr("src")
+            if !imageUrl.contains(".org") {
+                imageUrl = EpisodeFetcher.baseUrl + imageUrl
+            }
         }
         else {
             imageUrl = ""
@@ -198,34 +201,13 @@ public final class EpisodeFetcher {
 
         let localImage = try downloadAndSaveImage(imageUrl)
 
-        guard let header = try episodeInfo.getElementsByTag("h1")
-                                          .first()?
-                                          .text()
-            else { throw Error.invalidEpisodePageError }
-        guard let idx = header.index(of: " ")
-            else { throw Error.invalidEpisodePageError }
-        let number = header.substring(to: header.index(before: idx))
-        let title = header.substring(from: header.index(after: idx))
-
-        guard let dateString = try episodeInfo.getElementsByClass("date")
-                                                         .first()?
-                                                         .text()
-            else { throw Error.invalidEpisodePageError }
-        guard let airDate = EpisodeFetcher.formatter.date(from: dateString)
-            else { throw Error.invalidEpisodePageError }
-
-        guard let description = try episodeInfo.getElementsByClass("description")
-                                               .first()?
-                                               .text()
-            else { throw Error.invalidEpisodePageError }
-
         let episode = Episode()
         let airing = Airing()
         let episodeId = Int(number)!
 
         episode.id = Identifier(episodeId)
         episode.title = title
-        episode.episodeUrl = url
+        episode.episodeUrl = episodeUrl
         episode.imageUrl = localImage
         episode.description = description
 
@@ -236,26 +218,31 @@ public final class EpisodeFetcher {
         return (episode, airing)
     }
 
-    private func parseAiringFromHomepageSlide(_ node: Element) throws -> (String, Airing) {
-        guard let header = try node.getElementsByTag("h3").first()
+    private func parseAiringFromHomepage() throws -> (String, Airing) {
+        print("Scraping homepage")
+        let page = try drop.client.get(EpisodeFetcher.baseUrl)
+        let html = try SwiftSoup.parse(page.description, EpisodeFetcher.baseUrl)
+
+        guard let episodeHeader = try html.getElementsByClass("view-homepage").first()
+            else { throw Error.invalidSplashPageError }
+
+        guard let header = try episodeHeader.getElementsByTag("h2").first()
             else { throw Error.invalidSplashPageError }
         guard let link = try header.getElementsByTag("a").first()
             else { throw Error.invalidSplashPageError }
         let urlStub = try link.attr("href")
         let episodeUrl = EpisodeFetcher.baseUrl + urlStub
 
-        let headerString = try link.text()
-        guard let idx = headerString.index(of: " ")
-            else { throw Error.invalidSplashPageError }
-        let number = headerString.substring(to: headerString.index(before: idx))
+        guard let numberString = try episodeHeader.getElementsByClass("field-name-field-episode-number").first()?.text()
+            else {throw Error.invalidEpisodePageError }
+        // "This Week: ###"
+        let number = String(describing: numberString.split(separator: " ").last!)
         let episodeId = Int(number)!
 
-        guard let dateString = try node.getElementsByClass("date")
-                                       .first()?
-                                       .text()
-            else { throw Error.invalidSplashPageError }
+        guard let dateString = try episodeHeader.getElementsByClass("field-name-field-radio-air-date").first()?.text()
+            else {throw Error.invalidEpisodePageError }
         guard let date = EpisodeFetcher.formatter.date(from: dateString)
-            else { throw Error.invalidSplashPageError }
+            else { throw Error.invalidEpisodePageError }
 
         let airing = Airing(episodeId: episodeId, airDate: date)
 
