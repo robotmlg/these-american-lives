@@ -14,7 +14,9 @@ public final class EpisodeFetcher {
 
     static let baseUrl = "https://www.thisamericanlife.org"
     static let episodeBaseUrl = baseUrl + "/radio-archives/episode/"
-    static let twoDays : Double = 2 * 24 * 60 * 60
+    static let oneDay: Double = 24 * 60 * 60
+    static let twoDays: Double = 2 * oneDay
+    static let sevenDays: Double = 7 * oneDay
 
     static let formatter: DateFormatter = {
         let df = DateFormatter()
@@ -70,12 +72,21 @@ public final class EpisodeFetcher {
     }
 
     public func scrapeNewEpisodes() throws {
-        let (episodeUrl, airing) = try parseAiringFromHomepage()
+        let page = try drop.client.get(EpisodeFetcher.baseUrl)
+        let html = try SwiftSoup.parse(page.description, EpisodeFetcher.baseUrl)
+
+        let (episodeUrl, airing) = try parseAiringFromHomepage(html)
 
         // get the description from the episode page to ensure getting the full text
         let (episode, originalAiring) = try scrapeEpisodePage(episodeUrl)
 
         try processEpisode(episode, originalAiring: originalAiring, airing: airing)
+
+        let (nextEpisodeUrl, nextAiring) = try parseNextWeeksAiring(html)
+
+        let (nextEpisode, nextOriginalAiring) = try scrapeEpisodePage(nextEpisodeUrl)
+
+        try processEpisode(nextEpisode, originalAiring: nextOriginalAiring, airing: nextAiring)
     }
 
     private func processEpisode(_ episode: Episode,
@@ -218,10 +229,8 @@ public final class EpisodeFetcher {
         return (episode, airing)
     }
 
-    private func parseAiringFromHomepage() throws -> (String, Airing) {
+    private func parseAiringFromHomepage(_ html: Document) throws -> (String, Airing) {
         print("Scraping homepage")
-        let page = try drop.client.get(EpisodeFetcher.baseUrl)
-        let html = try SwiftSoup.parse(page.description, EpisodeFetcher.baseUrl)
 
         guard let episodeHeader = try html.getElementsByClass("view-homepage").first()
             else { throw Error.invalidSplashPageError }
@@ -243,6 +252,36 @@ public final class EpisodeFetcher {
             else {throw Error.invalidEpisodePageError }
         guard let date = EpisodeFetcher.formatter.date(from: dateString)
             else { throw Error.invalidEpisodePageError }
+
+        let airing = Airing(episodeId: episodeId, airDate: date)
+
+        return (episodeUrl, airing)
+    }
+
+    private func parseNextWeeksAiring(_ html: Document) throws -> (String, Airing)
+    {
+        print("Scraping next week's airing")
+
+        guard let nextWeekButton = try html.getElementsByClass("next-week").first()
+            else {
+                print("No next-week button found")
+                throw Error.invalidSplashPageError
+            }
+        guard let link = try nextWeekButton.getElementsByTag("a").first()
+            else { throw Error.invalidSplashPageError }
+        let urlStub = try link.attr("href")
+        let episodeUrl = EpisodeFetcher.baseUrl + urlStub
+
+        // "/###/title-text"
+        let number = String(describing: urlStub.split(separator: "/").first!)
+        let episodeId = Int(number)!
+
+        let lastAiring = try Airing.makeQuery()
+                                   .sort("air_date", .descending)
+                                   .limit(1)
+                                   .first()
+
+        let date = lastAiring!.airDate.addingTimeInterval(EpisodeFetcher.sevenDays)
 
         let airing = Airing(episodeId: episodeId, airDate: date)
 
