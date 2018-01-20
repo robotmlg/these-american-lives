@@ -277,6 +277,9 @@ public final class EpisodeFetcher {
         let episodeId = Int(number)!
 
         let lastAiring = try Airing.makeQuery()
+                                    // this assumes the same episode never airs
+                                    // twice in a row
+                                   .filter("episode_id", .notEquals, episodeId)
                                    .sort("air_date", .descending)
                                    .limit(1)
                                    .first()
