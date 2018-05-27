@@ -33,7 +33,7 @@ $ vapor build
 2. `$ vapor run serve`.  The app will scrape all needed episodes from thisamericanlife.org, and any re-runs shown on the homepage
 
 # What's next?
-- [ ] Link together episodes with later "updated" versions e.g. [628](https://www.thisamericanlife.org/radio-archives/episode/628/in-the-shadow-of-the-city-2017) is an updated version of [307](https://www.thisamericanlife.org/radio-archives/episode/307/in-the-shadow-of-the-city)
+- [x] Link together episodes with later "updated" versions e.g. [628](https://www.thisamericanlife.org/radio-archives/episode/628/in-the-shadow-of-the-city-2017) is an updated version of [307](https://www.thisamericanlife.org/radio-archives/episode/307/in-the-shadow-of-the-city)
   - [ ] Maybe grab the info about each segment and display each episode that those appear in?... hm...
 - [ ] Statistics page
 - [ ] Episode search
