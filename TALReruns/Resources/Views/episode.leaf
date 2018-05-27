@@ -29,6 +29,16 @@
     </div>
 </div>
 <div class="row view-card">
+    <div class="col">
+<h2>Related Episodes</h2>
+        <ul>
+#loop(similar, "similar") {
+            <li><a href="/episodes/#(similar.episodeId)">#(similar.title)</a> - #(similar.originalAirDate)</li>
+}
+        </ul>
+    </div>
+</div>
+<div class="row view-card">
     <div class="col-sm-6">
         #if(previous) { <p><a href="/episodes/#(previous)">« Previous Episode</a></p> }
     </div>

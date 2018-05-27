@@ -6,8 +6,10 @@
 //
 //
 
+import Foundation
+
 final class EpisodeRepository {
-    
+
     func getLatestAirings(_ count: Int) throws -> [AiringView] {
         return try AiringView.makeQuery()
                          .sort("air_date", .descending)
@@ -86,5 +88,21 @@ final class EpisodeRepository {
     func getEpisode(_ id: Int) throws -> OriginalAiring {
         guard let episode = try OriginalAiring.find(id) else { throw Abort.notFound }
         return episode
+    }
+
+    func getSimilarEpisodes(_ episode: OriginalAiring) throws -> [OriginalAiring] {
+        let titleParts = episode.title.split(separator: " ")
+
+        if titleParts.count == 1 {
+            return []
+        }
+
+        let titleMatch = titleParts.dropLast().joined(separator: " ") + "%"
+
+        return try OriginalAiring.makeQuery()
+            .filter("title", .custom("LIKE"), titleMatch)
+            .filter("title", .notEquals, episode.title)
+            .sort("original_air_date", .descending)
+            .all()
     }
 }
